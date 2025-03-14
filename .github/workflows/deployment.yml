@@ -20,12 +20,12 @@ jobs:
         with:
           terraform_version: latest
 
-      - name: Change directory to terraform
-        run: cd ./terraform
-        working-directory: ./terraform
+      - name: List files in terraform directory
+        run: ls -la ./terraform
 
       - name: Terraform Init
         run: terraform init
+        working-directory: ./terraform
 
       - name: Terraform Apply
         id: terraform
