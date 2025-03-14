@@ -21,3 +21,8 @@ variable "availability_zones" {
   type        = list(string)
   default     = ["eu-west-2b", "eu-west-2a"]
 }
+
+variable "container_port" {
+  description = "The port the container will listen on"
+  type        = number
+}

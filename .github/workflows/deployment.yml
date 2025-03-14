@@ -1,9 +1,6 @@
 name: Deploy to AWS
 
-on:
-  push:
-    branches:
-      - main
+on: workflow_dispatch
 
 jobs:
   terraform:
@@ -23,6 +20,9 @@ jobs:
         with:
           terraform_version: latest
 
+      - name: Change directory to terraform
+        run: cd terraform
+
       - name: Terraform Init
         run: terraform init
 
@@ -40,6 +40,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -52,10 +55,15 @@ jobs:
         run: |
           aws ecr get-login-password --region eu-west-2 | docker login --username AWS --password-stdin ${{ env.ecr_repository_url }}
 
+      - name: Remove previous image from ECR (if exists)
+        run: |
+          IMAGE_URI=${{ env.ecr_repository_url }}:latest
+          aws ecr batch-delete-image --repository-name ${{ env.ecr_repo_name }} --image-ids imageTag=latest || echo "No previous image to delete"
+
       - name: Build Docker Image
         run: |
           docker build -t ${{ env.ecr_repository_url }}:latest .
-      
+
       - name: Push Docker Image
         run: |
           docker push ${{ env.ecr_repository_url }}:latest
