@@ -19,8 +19,8 @@ resource "aws_security_group" "alb_sg" {
   }
 
   egress {
-    from_port   = 0
-    to_port     = 0
+    from_port   = var.container_port 
+    to_port     = var.container_port
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
   }
@@ -32,9 +32,9 @@ resource "aws_lb" "this" {
   internal           = false
   load_balancer_type = "application"
   security_groups    = [aws_security_group.alb_sg.id]
-  subnets            = var.public_subnet_ids
+  subnets            = [aws_subnet.public[0].id, aws_subnet.public[1].id]
 
-  enable_deletion_protection = false # Set to true in production
+  enable_deletion_protection = false
 }
 
 # Target Group for ECS

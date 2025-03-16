@@ -53,6 +53,7 @@ variable "container_name" {
 variable "container_port" {
   description = "The port the container will listen on"
   type        = number
+  default = 3000
 }
 
 variable "desired_count" {

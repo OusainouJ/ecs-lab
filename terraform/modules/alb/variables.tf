@@ -11,4 +11,5 @@ variable "public_subnet_ids" {
 variable "container_port" {
   description = "The port the ECS container listens on"
   type        = number
+  default = 3000
 }

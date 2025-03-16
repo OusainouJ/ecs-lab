@@ -39,3 +39,16 @@ module "ecs_fargate" {
   desired_count            = var.desired_count
   alb_target_group_arn     = module.alb.alb_target_group_arn
 }
+
+module "cloudflare" {
+  source                 = "./modules/cloudflare"
+  cloudflare_api_token   = var.cloudflare_api_token
+  cloudflare_zone_id     = var.cloudflare_zone_id
+  cloudflare_record_name = "tm"  
+  alb_dns_name           = module.alb.alb_dns_name
+  domain_name            = "ousainoujoof.com"
+}
+provider "cloudflare" {
+  api_token = var.cloudflare_api_token
+}
+

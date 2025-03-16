@@ -1,6 +1,7 @@
 name: Deploy to AWS
 
-on: workflow_dispatch
+on:
+  workflow_dispatch:
 
 jobs:
   terraform:
@@ -15,24 +16,24 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Configure AWS Credentials 
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-west-2  # <-- Set the AWS region
+          aws-region: eu-west-2
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
         with:
           terraform_version: latest
 
-      - name: List files in terraform directory  
+      - name: List files in terraform directory
         run: ls -la ./terraform
 
       - name: Terraform Init
         run: terraform init
-        working-directory: ./terraform 
+        working-directory: ./terraform
 
       - name: Terraform Apply
         id: terraform
@@ -41,7 +42,7 @@ jobs:
           echo "ecr_repository_url=$(terraform output -raw ecr_repository_url)" >> $GITHUB_ENV
           echo "ecs_cluster_name=$(terraform output -raw ecs_cluster_name)" >> $GITHUB_ENV
           echo "ecs_service_name=$(terraform output -raw ecs_service_name)" >> $GITHUB_ENV
-        working-directory: ./terraform 
+        working-directory: ./terraform
 
   push-image:
     name: Build & Push Docker Image
@@ -52,7 +53,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v3
 
-      - name: Configure AWS Credentials  
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -67,7 +68,7 @@ jobs:
       - name: Remove previous image from ECR (if exists)
         run: |
           IMAGE_URI=${{ env.ecr_repository_url }}:latest
-          aws ecr batch-delete-image --repository-name ${{ env.ecr_repo_name }} --image-ids imageTag=latest || echo "No previous image to delete"
+          aws ecr batch-delete-image --repository-name ${{ env.ecr_repo }} --image-ids imageTag=latest || echo "No previous image to delete"
 
       - name: Build Docker Image
         run: |
@@ -83,7 +84,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Configure AWS Credentials  #
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}

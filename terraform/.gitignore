@@ -42,3 +42,7 @@ terraform.rc
 
 # Ignore Windows system files
 Thumbs.db
+
+# Ignore Terraform state files
+terraform.tfstate
+terraform.tfstate.backup

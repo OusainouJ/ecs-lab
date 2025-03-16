@@ -1,3 +1,4 @@
+
 variable "aws_region" {
   description = "The AWS region to deploy resources"
   type        = string
@@ -56,4 +57,14 @@ variable "desired_count" {
   description = "The desired number of ECS tasks"
   type        = number
   default     = 1
+}
+
+variable "cloudflare_api_token" {
+  description = "API token for Cloudflare"
+  type        = string
+}
+
+variable "cloudflare_zone_id" {
+  description = "Cloudflare Zone ID"
+  type        = string
 }

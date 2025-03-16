@@ -9,19 +9,17 @@ resource "aws_ecs_task_definition" "app_task" {
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   execution_role_arn       = var.ecs_task_execution_role_arn
-  container_definitions    = jsonencode([
-    {
-      name      = var.container_name
-      image     = var.container_image
-      essential = true
-      portMappings = [
-        {
-          containerPort = var.container_port
-          hostPort      = var.container_port
-        }
-      ]
-    }
-  ])
+  container_definitions    = jsonencode([{
+    name      = var.container_name
+    image     = var.container_image
+    essential = true
+    portMappings = [
+      {
+        containerPort = var.container_port
+        hostPort      = var.container_port
+      }
+    ]
+  }])
 }
 
 resource "aws_ecs_service" "app_service" {
@@ -37,7 +35,7 @@ resource "aws_ecs_service" "app_service" {
   }
 
   load_balancer {
-    target_group_arn = var.alb_target_group_arn
+    target_group_arn = aws_lb_target_group.this.arn  # Referencing the target group
     container_name   = var.container_name
     container_port   = var.container_port
   }
