@@ -17,10 +17,10 @@ module "ecr" {
 }
 
 module "alb" {
-  source           = "./modules/alb"
-  vpc_id           = module.networking.vpc_id
+  source            = "./modules/alb"
+  vpc_id            = module.networking.vpc_id
   public_subnet_ids = module.networking.public_subnets
-  container_port   = var.container_port
+  container_port    = var.container_port
 }
 
 module "ecs_fargate" {
@@ -48,11 +48,11 @@ module "cloudflare" {
   alb_dns_name           = module.alb.alb_dns_name
   domain_name            = "ousainoujoof.com"
 }
+
 provider "cloudflare" {
   api_token = var.cloudflare_api_token
 }
 
-# tells terraform that cloudflare comes from cloudflare/cloudflare and not hashicorp/cloudflare
 terraform {
   required_providers {
     cloudflare = {
@@ -60,8 +60,4 @@ terraform {
       version = "~> 4.0"
     }
   }
-}
-
-provider "cloudflare" {
-  api_token = var.cloudflare_api_token
 }
