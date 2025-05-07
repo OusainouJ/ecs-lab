@@ -1,66 +1,70 @@
-# terraform/modules/ecs_fargate/variables.tf
-
-variable "task_family" {
-  description = "The family name for the ECS task"
+variable "cluster_name" {
   type        = string
+  description = "Name of the ECS cluster."
 }
 
-variable "cpu" {
-  description = "The CPU units for the ECS task"
+variable "task_definition_family" {
   type        = string
+  description = "Family name for the ECS task definition."
 }
 
-variable "memory" {
-  description = "The memory for the ECS task"
-  type        = string
+variable "task_cpu" {
+  type        = number
+  description = "CPU units for the ECS task."
 }
 
-variable "ecs_task_execution_role_arn" {
-  description = "The ARN of the ECS task execution role"
-  type        = string
-}
-
-variable "container_image" {
-  description = "The Docker image for the container"
-  type        = string
-}
-
-variable "service_name" {
-  description = "The name of the ECS service"
-  type        = string
-}
-
-variable "subnets" {
-  description = "The subnets for the ECS service"
-  type        = list(string)
-}
-
-variable "security_groups" {
-  description = "The security groups for the ECS service"
-  type        = list(string)
-}
-
-variable "ecs_cluster_name" {
-  description = "The name of the ECS cluster"
-  type        = string
+variable "task_memory" {
+  type        = number
+  description = "Memory (in MB) for the ECS task."
 }
 
 variable "container_name" {
-  description = "The name of the container"
   type        = string
+  description = "Name of the container in the task definition."
+}
+
+variable "container_cpu" {
+  type        = number
+  description = "CPU units assigned to the container."
+}
+
+variable "container_memory" {
+  type        = number
+  description = "Memory (in MB) assigned to the container."
 }
 
 variable "container_port" {
-  description = "The port the container will listen on"
   type        = number
-  default = 3000
+  description = "Port on which the container listens."
+}
+
+variable "docker_image" {
+  type        = string
+  description = "Docker image used for the container (ECR Repository URI)."
+}
+
+variable "service_name" {
+  type        = string
+  description = "Name of the ECS service."
 }
 
 variable "desired_count" {
-  description = "The desired number of ECS tasks"
   type        = number
+  description = "Desired number of running ECS task instances."
 }
-variable "alb_target_group_arn" {
-  description = "The ARN of the ALB target group"
+
+variable "private_subnet_ids" {
+  type        = list(string)
+  description = "List of private subnet IDs for ECS networking."
+}
+
+variable "ecs_tasks_sg_id" {
   type        = string
+  description = "Security group ID for ECS tasks (injected from ALB module)."
 }
+
+variable "target_group_arn" {
+  type        = string
+  description = "ARN of the ALB target group for service load balancing."
+}
+
