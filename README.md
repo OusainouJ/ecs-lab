@@ -104,4 +104,4 @@ The deployment process for the **Team Echo App** is fully automated using **GitH
 
 The image below shows a successful run of each workflow, confirming that the CI/CD pipelines are functioning as expected.
 
-![Workflow Runs](Images/workflows.png)
+![Workflow Runs](images/workflows.png)
