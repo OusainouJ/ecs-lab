@@ -39,7 +39,7 @@ The infrastructure is deployed on **AWS** using a modular Terraform setup and fo
 
 All components are provisioned and updated through Terraform, and workflows are used to automate the deployment process.
 
-![Architecture Diagram](Images/architecture-diagram.png)
+![Architecture Diagram](images/architecture-diagram.png)
 
 ## App Containerisation
 
